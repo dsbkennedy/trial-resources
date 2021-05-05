@@ -1,0 +1,54 @@
+---
+title: "Sign In Sheet"
+output:
+  html_document: default
+  pdf_document: default
+  documentclass: article
+classoption: 
+  - landscape
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(pacman)
+
+pacman::p_load(here, linelist, dplyr, stringr, janitor, purrr, kableExtra, tidyr)
+
+```
+
+```{r custom_function}
+
+print_kable <- function(day) {
+  team_info %>% 
+    filter(training_day==day) %>% 
+    select(-training_day) %>% 
+    kable(booktabs = TRUE, longtable = TRUE, col.names=c('Team', 'Name', 
+                                                              'Designation', 'Phone', 'Sex', 'Signature')) %>% 
+          kable_styling(latex_options = c("hold_position", "repeat_header"), font_size = 16)
+}
+
+```
+
+
+```{r echo=FALSE}
+
+#Read in list of field staff
+team_info <- read.csv(here('data', 'field_staff.csv')) %>% clean_names() %>% 
+  mutate(contact_number=as.character(contact_number)) %>% 
+  mutate(signature='') 
+```
+
+## Sunday 15th 
+
+```{r echo=FALSE}
+print_kable("Sunday 15th")
+```
+
+\newpage
+
+## Monday 16th
+
+```{r echo=FALSE}
+print_kable("Monday 16th")
+```
+
